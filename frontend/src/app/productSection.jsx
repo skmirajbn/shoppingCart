@@ -3,14 +3,28 @@
 import Ratings from "@/components/ratings";
 import { CartContext } from "@/context/cartContext";
 import { useContext } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ProductSection() {
   const { cart, setCart } = useContext(CartContext);
-  const addToCart = () => {
-    setCart([...cart, 1]);
+  const addToCart = async () => {
+    try {
+      const resolveAfter3Sec = new Promise((resolve) => setTimeout(resolve, 1000));
+      await toast.promise(resolveAfter3Sec, {
+        pending: "Adding to the Cart",
+        success: "Added to cart",
+        error: "Cart Add Failed",
+      });
+      setCart([...cart, 1]);
+    } catch (error) {
+      // Handle any errors here
+      console.error(error);
+    }
   };
   return (
     <section className="px-6 py-4 mx-auto bg-gray-100 max-w-7xl">
+      <ToastContainer position="top-center" />
       <h2 className="py-6 text-4xl font-bold text-center">Product List</h2>
       <div className="p-10 bg-white rounded-lg">
         <div className="grid grid-cols-4 gap-4">
