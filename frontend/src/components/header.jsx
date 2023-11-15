@@ -8,17 +8,17 @@ export default function Header() {
     dropdown.current.classList.toggle("hidden");
   };
   return (
-    <div className="bg-gradient-to-r from-blue-500 to-emerald-500 py-4 text-white">
-      <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <h3 className="text-xl  font-semibold">
+    <div className="py-4 text-white bg-gradient-to-r from-blue-500 to-emerald-500">
+      <div className="flex items-center justify-between mx-auto max-w-7xl">
+        <h3 className="text-xl font-semibold ">
           Shopping Cart <i class="fa-solid fa-cart-shopping"></i>
         </h3>
         <div className="flex items-center gap-4" onClick={toggleDropdown}>
           <h3 className="font-medium ">Sk Miraj</h3>
-          <div className="flex items-center gap-2 relative">
-            <Image className="w-11 h-11 rounded-full object-cover" alt="avatar" src={avatar} />
+          <div className="relative flex items-center gap-2">
+            <Image className="object-cover rounded-full w-11 h-11" alt="avatar" src={avatar} />
             <i class="fa-solid fa-chevron-down"></i>
-            <div ref={dropdown} className="user-dropdown hidden">
+            <div ref={dropdown} className="hidden user-dropdown">
               <a className="btn-primary" href="">
                 <i class="fa-solid fa-bag-shopping mr-2"></i> My Orders
               </a>
