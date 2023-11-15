@@ -1,4 +1,4 @@
-export default function Rating({ rating = 4, className = "" }) {
+export default function Ratings({ rating = 4, className = "" }) {
   const stars = [];
   for (let i = 0; i < rating; i++) {
     stars.push(<i className={`fa-solid fa-star ${className}`} key={i}></i>);

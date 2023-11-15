@@ -1,8 +1,12 @@
 "use client";
+import { CartContext } from "@/context/cartContext";
 import Image from "next/image";
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import avatar from "./../../public/avatar.jpg";
 export default function Header() {
+  const { cart } = useContext(CartContext);
+  const cartCount = cart.length;
+
   const dropdown = useRef();
   const toggleDropdown = () => {
     dropdown.current.classList.toggle("hidden");
@@ -33,7 +37,7 @@ export default function Header() {
             <span className="font-bold">Cart</span>
             <div className="relative">
               <i class="fa-solid fa-bag-shopping text-3xl"></i>
-              <div className="absolute flex items-center justify-center w-5 h-5 bg-red-600 rounded-full -top-1 -right-3">2</div>
+              <div className="absolute flex items-center justify-center w-5 h-5 bg-red-600 rounded-full -top-1 -right-3">{cartCount}</div>
             </div>
           </div>
         </div>
