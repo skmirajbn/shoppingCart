@@ -6,7 +6,6 @@ import useSWR from "swr";
 
 export default function ProductSection() {
   const { data: { data: products } = {}, error } = useSWR("/api/products", () => axios.get("/api/products"));
-  console.log(products);
   return (
     <section className="px-6 py-4 mx-auto bg-gray-100 max-w-7xl">
       <h2 className="py-6 text-4xl font-bold text-center">Product List</h2>

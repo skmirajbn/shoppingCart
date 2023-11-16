@@ -1,25 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 import { CartContext } from "@/context/cartContext";
+import { addToCartLogic } from "@/lib/customFunctions";
 import { useContext } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Ratings from "./ratings";
 
 export default function Product({ product }) {
   const { name, image, price, rating } = product;
-  const { cart, setCart } = useContext(CartContext);
+  const { setCartCount } = useContext(CartContext);
   const addToCart = async () => {
-    try {
-      const resolveAfter3Sec = new Promise((resolve) => setTimeout(resolve, 5000));
-      await toast.promise(resolveAfter3Sec, {
-        pending: "Adding to the Cart",
-        success: "Added to cart",
-        error: "Cart Add Failed",
-      });
-      setCart([...cart, 1]);
-    } catch (error) {
-      // Handle any errors here
-      console.error(error);
-    }
+    await addToCartLogic(product, toast, setCartCount);
   };
   return (
     <div className="h-full max-w-xs space-y-1 overflow-hidden bg-gray-100 rounded-lg">

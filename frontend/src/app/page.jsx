@@ -6,13 +6,13 @@ import { useState } from "react";
 import ProductSection from "./productSection";
 
 export default function Home() {
-  const [cart, setCart] = useState([]);
+  const [cartCount, setCartCount] = useState(JSON.parse(localStorage.getItem("cart"))?.length || 0);
   return (
-    <CartContext.Provider value={{ cart, setCart }}>
-      <main>
+    <main>
+      <CartContext.Provider value={{ cartCount, setCartCount }}>
         <Header />
         <ProductSection />
-      </main>
-    </CartContext.Provider>
+      </CartContext.Provider>
+    </main>
   );
 }
