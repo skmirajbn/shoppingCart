@@ -9,28 +9,40 @@ export default function Cart() {
   const [quantities, setQuantities] = useState({});
   const [subTotal, setSubTotal] = useState(0);
 
-  useEffect(() => {
-    productMutate();
-  }, []);
-
   const handleQuantityChange = (index, quantity) => {
     setQuantities((prevQuantities) => ({
       ...prevQuantities,
       [index]: quantity,
     }));
+    productMutate();
   };
 
   useEffect(() => {
-    const calculateSubTotal = () => {
-      let total = 0;
-      cartProducts?.forEach((product, index) => {
-        const quantity = quantities[index] || 1;
-        total += parseFloat(product.price) * parseInt(quantity);
-      });
-      setSubTotal(total);
-    };
+    productMutate();
+  }, []);
 
-    calculateSubTotal();
+  const handleRemoveItem = (index) => {
+    const newCartProducts = cartProducts.filter((_, i) => i !== index);
+    const newQuantities = { ...quantities };
+    delete newQuantities[index];
+
+    localStorage.setItem("cart", JSON.stringify(newCartProducts)); // Changed the key to 'cart'
+    setQuantities(newQuantities);
+    calculateSubTotal(newCartProducts, newQuantities);
+    productMutate();
+  };
+
+  const calculateSubTotal = (newCartProducts, newQuantities) => {
+    let total = 0;
+    newCartProducts?.forEach((product, index) => {
+      const quantity = newQuantities[index] || 1;
+      total += parseFloat(product.price) * parseInt(quantity);
+    });
+    setSubTotal(total);
+  };
+
+  useEffect(() => {
+    calculateSubTotal(cartProducts, quantities);
   }, [quantities, cartProducts]);
 
   return (
@@ -45,14 +57,19 @@ export default function Cart() {
               <div>
                 <h3 className="text-lg font-semibold text-green-800">{product.name}</h3>
                 <h4 className="text-orange-500">
-                  <i class="fa-solid fa-bangladeshi-taka-sign"></i> {product.price}
+                  <i className="fa-solid fa-bangladeshi-taka-sign"></i> {product.price}
                 </h4>
                 <h3>Total: {parseFloat(product.price) * parseInt(quantities[index]) || parseFloat(product.price)}</h3>
               </div>
+              <button className="px-4 py-1 text-white bg-red-600 rounded-md" onClick={() => handleRemoveItem(index)}>
+                Remove
+              </button>
             </div>
           ))}
         </div>
-        <h2 className="text-xl font-bold text-center">Sub Total: {subTotal}</h2>
+        <h2 className="text-xl font-bold text-center">
+          Sub Total: <span className="text-orange-600">{subTotal}</span> Taka
+        </h2>
         <button className="p-3 text-white bg-green-600 rounded-md">Confirm Order</button>
       </div>
     </section>
