@@ -4,7 +4,8 @@ import { useContext } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Ratings from "./ratings";
 
-export default function Product({ name, price, rating, image }) {
+export default function Product({ product }) {
+  const { name, image, price, rating } = product;
   const { cart, setCart } = useContext(CartContext);
   const addToCart = async () => {
     try {
@@ -22,7 +23,7 @@ export default function Product({ name, price, rating, image }) {
   };
   return (
     <div className="h-full max-w-xs space-y-1 overflow-hidden bg-gray-100 rounded-lg">
-      <img className="object-cover w-full h-72" src="images/productImages/running-shoes-2048px-9718.jpg" alt="" />
+      <img className="object-cover w-full h-72" src={image} alt="" />
       <div className="flex flex-col justify-between h-[12.5rem] p-4">
         <h3 className="text-lg font-semibold line-clamp-2">{name}</h3>
         <div>
