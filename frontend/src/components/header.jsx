@@ -47,6 +47,11 @@ export default function Header() {
                   Login <i class="fa-solid fa-right-to-bracket"></i>
                 </button>
               </Link>
+              <Link href="/create-account">
+                <button className="px-4 py-1 font-bold bg-orange-600 rounded-lg">
+                  Sign Up <i class="fa-solid fa-user-plus"></i>
+                </button>
+              </Link>
             </div>
           )}
           <Link href={"/cart"}>

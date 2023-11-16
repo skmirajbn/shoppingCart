@@ -2,9 +2,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { CartContext } from "@/context/cartContext";
+import { useAuth } from "@/hooks/auth";
+import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 
 export default function Cart() {
+  const { user } = useAuth({ middleware: "guest" });
   const { cartProducts, productMutate } = useContext(CartContext);
   const [quantities, setQuantities] = useState({});
   const [subTotal, setSubTotal] = useState(0);
@@ -70,7 +73,12 @@ export default function Cart() {
         <h2 className="text-xl font-bold text-center">
           Sub Total: <span className="text-orange-600">{subTotal}</span> Taka
         </h2>
-        <button className="p-3 text-white bg-green-600 rounded-md">Confirm Order</button>
+        {!user && (
+          <Link href={"/login"}>
+            <button className="p-3 text-white bg-green-600 rounded-md">Confirm Order</button>
+          </Link>
+        )}
+        {user && <button className="p-3 text-white bg-green-600 rounded-md">Confirm Order</button>}
       </div>
     </section>
   );
