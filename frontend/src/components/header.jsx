@@ -2,6 +2,7 @@
 import { CartContext } from "@/context/cartContext";
 import { useAuth } from "@/hooks/auth";
 import Image from "next/image";
+import Link from "next/link";
 import { useContext, useRef } from "react";
 import avatar from "./../../public/avatar.jpg";
 export default function Header() {
@@ -15,9 +16,11 @@ export default function Header() {
   return (
     <div className="py-4 text-white bg-gradient-to-r from-blue-500 to-emerald-500">
       <div className="flex items-center justify-between mx-auto max-w-7xl">
-        <h3 className="text-xl font-semibold ">
-          Shopping Cart <i class="fa-solid fa-cart-shopping"></i>
-        </h3>
+        <Link href="/">
+          <h3 className="text-xl font-semibold ">
+            Shopping Cart <i class="fa-solid fa-cart-shopping"></i>
+          </h3>
+        </Link>
 
         <div className="flex items-center gap-4">
           {user && (
@@ -39,18 +42,22 @@ export default function Header() {
           )}
           {!user && (
             <div className="flex items-center gap-3 ">
-              <button className="px-4 py-1 font-bold bg-blue-600 rounded-lg">
-                Login <i class="fa-solid fa-right-to-bracket"></i>
-              </button>
+              <Link href="/login">
+                <button className="px-4 py-1 font-bold bg-blue-600 rounded-lg">
+                  Login <i class="fa-solid fa-right-to-bracket"></i>
+                </button>
+              </Link>
             </div>
           )}
-          <div className="flex items-center gap-3 ">
-            <span className="font-bold">Cart</span>
-            <div className="relative">
-              <i class="fa-solid fa-bag-shopping text-3xl"></i>
-              <div className="absolute flex items-center justify-center w-6 h-6 text-sm bg-red-600 rounded-full -top-1 -right-4">{cartCount}</div>
+          <Link href={"/cart"}>
+            <div className="flex items-center gap-3 ">
+              <span className="font-bold">Cart</span>
+              <div className="relative">
+                <i class="fa-solid fa-bag-shopping text-3xl"></i>
+                <div className="absolute flex items-center justify-center w-6 h-6 text-sm bg-red-600 rounded-full -top-1 -right-4">{cartCount}</div>
+              </div>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
     </div>
