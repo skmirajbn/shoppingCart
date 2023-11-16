@@ -8,7 +8,7 @@ export default function Product({ name, price, rating, image }) {
   const { cart, setCart } = useContext(CartContext);
   const addToCart = async () => {
     try {
-      const resolveAfter3Sec = new Promise((resolve) => setTimeout(resolve, 1000));
+      const resolveAfter3Sec = new Promise((resolve) => setTimeout(resolve, 5000));
       await toast.promise(resolveAfter3Sec, {
         pending: "Adding to the Cart",
         success: "Added to cart",
