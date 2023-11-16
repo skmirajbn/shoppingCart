@@ -13,8 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return ['Laravel' => app()->version()];
+Route::group(['middleware' => 'guest', 'prefix' => 'api'], function () {
+    Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index']);
 });
 
-require __DIR__.'/auth.php';
+
+
+require __DIR__ . '/auth.php';
