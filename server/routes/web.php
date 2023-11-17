@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'api'], function () {
     Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index']);
+});
+Route::group(['prefix' => 'api', 'middleware' => ['auth:sanctum']], function () {
+    Route::get('/cart', [CartProductController::class, 'index']);
 });
 
 

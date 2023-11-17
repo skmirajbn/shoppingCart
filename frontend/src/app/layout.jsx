@@ -10,18 +10,21 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
-  const { error } = useAuth({ middleware: "guest" });
+  const { user } = useAuth({ middleware: "guest" });
   const [cartProducts, setCartProducts] = useState([]);
   const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
-    if (!error) {
-      localStorage.setItem("login", true);
-    } else {
-      localStorage.removeItem("login");
-    }
-  }, [error]);
-  console.log(error);
+    setTimeout(() => {
+      if (user) {
+        localStorage.setItem("login", true);
+      } else {
+        localStorage.removeItem("login");
+      }
+      productMutate();
+    }, 4000);
+  }, [user]);
+
   const productMutate = () => {
     let cartItems = JSON.parse(localStorage?.getItem("cart")) || [];
     let carItems = cartItems;

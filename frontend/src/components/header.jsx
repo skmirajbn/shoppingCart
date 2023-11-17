@@ -27,6 +27,7 @@ export default function Header() {
           {isLoggedin() && (
             <div className="flex items-center gap-4" onClick={toggleDropdown}>
               <h3 className="font-medium ">Sk Miraj</h3>
+              <h5 className="px-2 py-1 bg-green-600 rounded-lg">{user?.role}</h5>
               <div className="relative flex items-center gap-2">
                 <Image className="object-cover rounded-full w-11 h-11" alt="avatar" src={avatar} />
                 <i class="fa-solid fa-chevron-down"></i>
@@ -34,6 +35,13 @@ export default function Header() {
                   <a className="btn-primary" href="">
                     <i class="fa-solid fa-bag-shopping mr-2"></i> My Orders
                   </a>
+                  {user?.role === "admin" && (
+                    <Link href={"/admin/add-product"}>
+                      <div className="btn-primary">
+                        <i class="fa-solid fa-bag-shopping mr-2"></i>Product +
+                      </div>
+                    </Link>
+                  )}
                   <a className="btn-logout" href="">
                     <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
                   </a>

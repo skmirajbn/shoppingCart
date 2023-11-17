@@ -3,13 +3,15 @@ import { CartContext } from "@/context/cartContext";
 import { addToCartLogic } from "@/lib/customFunctions";
 import { useContext } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Ratings from "./ratings";
 
 export default function Product({ product }) {
   const { name, image, price, rating } = product;
-  const { setCartCount } = useContext(CartContext);
+  const { setCartCount, productMutate } = useContext(CartContext);
   const addToCart = async () => {
-    await addToCartLogic(product, toast, setCartCount);
+    await addToCartLogic(product, toast, productMutate);
+    productMutate();
   };
   return (
     <div className="h-full max-w-xs space-y-1 overflow-hidden bg-gray-100 rounded-lg">
