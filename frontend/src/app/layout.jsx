@@ -26,20 +26,6 @@ export default function RootLayout({ children }) {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      if (user) {
-        if (!localStorage.getItem("login")) {
-          localStorage.setItem("login", true);
-        }
-      } else {
-        if (localStorage.getItem("login")) {
-          localStorage.removeItem("login");
-        }
-      }
-    }, 5000);
-  }, [user]);
-
-  useEffect(() => {
     productMutate();
   }, []);
   return (
