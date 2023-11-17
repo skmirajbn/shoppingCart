@@ -38,7 +38,7 @@ export default function Header() {
                 <Image className="object-cover rounded-full w-11 h-11" alt="avatar" src={avatar} />
                 <i class="fa-solid fa-chevron-down"></i>
                 <div ref={dropdown} className="hidden user-dropdown">
-                  <Link className="btn-primary" href="">
+                  <Link className="btn-primary" href="/orders">
                     <i class="fa-solid fa-bag-shopping mr-2"></i> My Orders
                   </Link>
                   {user?.role === "admin" && (

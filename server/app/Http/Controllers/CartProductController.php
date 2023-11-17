@@ -25,6 +25,12 @@ class CartProductController extends Controller {
 
 
     }
+
+    public function clear() {
+        $user = auth()->user()->id;
+        CartProduct::where('user_id', $user)->delete();
+        return response()->noContent();
+    }
     /**
      * Display a listing of the resource.
      */

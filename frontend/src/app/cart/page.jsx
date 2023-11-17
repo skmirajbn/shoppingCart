@@ -5,10 +5,12 @@ import { CartContext } from "@/context/cartContext";
 import { useAuth } from "@/hooks/auth";
 import axios from "@/lib/axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
 
 export default function Cart() {
+  const router = useRouter();
   const { user } = useAuth({ middleware: "guest" });
   const { data: dataCartProducts, mutate } = useSWR("cart", () => axios.get("api/cart"));
   let cartProducts = dataCartProducts?.data;
@@ -79,46 +81,62 @@ export default function Cart() {
     }
   };
 
+  const handleCheckout = async (e) => {
+    await axios.post("api/order", e).then((response) => {
+      axios.delete("api/cart/clear/all");
+      mutate();
+      alert("Order Placed");
+      router.push("/orders");
+    });
+  };
+
   return (
-    <section className="px-6 py-4 mx-auto bg-gray-100 max-w-7xl">
-      <h2 className="py-6 text-4xl font-bold text-center">Cart</h2>
-      <div className="p-10 bg-white rounded-lg">
-        <div className="space-y-3">
-          {cartProducts?.map((product, index) => (
-            <div className="flex items-center gap-4" key={index}>
-              <img className="object-cover w-20 h-20 rounded-md" src={process.env.NEXT_PUBLIC_BACKEND_URL + "images/" + product.image} alt="" />
-              <input className="w-12 px-2 py-2 border-2 border-gray-500 rounded-lg" value={quantities[index] || 1} type="number" onChange={(e) => handleQuantityChange(index, e.target.value)} />
-              <div>
-                <h3 className="text-lg font-semibold text-green-800">{product.name}</h3>
-                <h4 className="text-orange-500">
-                  <i className="fa-solid fa-bangladeshi-taka-sign"></i> {product.price}
-                </h4>
-                <h3>Total: {parseFloat(product.price) * parseInt(quantities[index]) || parseFloat(product.price)}</h3>
+    <form action={handleCheckout}>
+      <section className="px-6 py-4 mx-auto bg-gray-100 max-w-7xl">
+        <h2 className="py-6 text-4xl font-bold text-center">Cart</h2>
+        <div className="p-10 bg-white rounded-lg">
+          <div className="space-y-3">
+            {cartProducts?.map((product, index) => (
+              <div className="flex items-center gap-4" key={index}>
+                <img className="object-cover w-20 h-20 rounded-md" src={process.env.NEXT_PUBLIC_BACKEND_URL + "images/" + product.image} alt="" />
+                <input className="w-12 px-2 py-2 border-2 border-gray-500 rounded-lg" value={quantities[index] || 1} type="number" onChange={(e) => handleQuantityChange(index, e.target.value)} name="quantities[]" />
+                <div>
+                  <h3 className="text-lg font-semibold text-green-800">{product.name}</h3>
+                  <h4 className="text-orange-500">
+                    <i className="fa-solid fa-bangladeshi-taka-sign"></i> {product.price}
+                  </h4>
+                  <h3>Total: {parseFloat(product.price) * parseInt(quantities[index]) || parseFloat(product.price)}</h3>
+                  <input type="hidden" value={product.id} name="product_ids[]" />
+                </div>
+                {!user && (
+                  <button className="px-4 py-1 text-white bg-red-600 rounded-md" onClick={() => handleRemoveItem(index)}>
+                    Remove
+                  </button>
+                )}
+                {user && (
+                  <button className="px-4 py-1 text-white bg-red-600 rounded-md" onClick={() => handleCartDelete(product.cart_product_id)}>
+                    Remove
+                  </button>
+                )}
+                <p>{product.cart_product_id}</p>
               </div>
-              {!user && (
-                <button className="px-4 py-1 text-white bg-red-600 rounded-md" onClick={() => handleRemoveItem(index)}>
-                  Remove
-                </button>
-              )}
-              {user && (
-                <button className="px-4 py-1 text-white bg-red-600 rounded-md" onClick={() => handleCartDelete(product.cart_product_id)}>
-                  Remove
-                </button>
-              )}
-              <p>{product.cart_product_id}</p>
-            </div>
-          ))}
+            ))}
+          </div>
+          <h2 className="text-xl font-bold text-center">
+            Sub Total: <span className="text-orange-600">{subTotal}</span> Taka
+          </h2>
+          {!user && (
+            <Link href={"/login"}>
+              <button className="p-3 text-white bg-green-600 rounded-md">Confirm Order</button>
+            </Link>
+          )}
+          {user && (
+            <button type="submit" className="p-3 text-white bg-green-600 rounded-md">
+              Confirm Order
+            </button>
+          )}
         </div>
-        <h2 className="text-xl font-bold text-center">
-          Sub Total: <span className="text-orange-600">{subTotal}</span> Taka
-        </h2>
-        {!user && (
-          <Link href={"/login"}>
-            <button className="p-3 text-white bg-green-600 rounded-md">Confirm Order</button>
-          </Link>
-        )}
-        {user && <button className="p-3 text-white bg-green-600 rounded-md">Confirm Order</button>}
-      </div>
-    </section>
+      </section>
+    </form>
   );
 }

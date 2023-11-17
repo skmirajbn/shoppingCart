@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartProductController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,12 @@ Route::group(['prefix' => 'api', 'middleware' => ['auth:sanctum']], function () 
     Route::post('/cart', [CartProductController::class, 'store']);
     Route::get('/cart', [CartProductController::class, 'index']);
     Route::delete('/cart/{cartProduct}', [CartProductController::class, 'destroy']);
+
+    Route::delete('/cart/clear/all', [CartProductController::class, 'clear']);
+
+    Route::post('/order', [OrderController::class, 'store']);
+    Route::get('/order/{order}', [OrderController::class, 'orderProducts']);
+    Route::get('/orders', [OrderController::class, 'index']);
 
     Route::post('/cart/sync', [CartProductController::class, 'sync']);
 });
