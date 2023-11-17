@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useContext, useRef } from "react";
 import avatar from "./../../public/avatar.jpg";
 export default function Header() {
+  const { logout } = useAuth({ middleware: "guest" });
   const isLoggedIn = useIsLoggedIn();
   const { user } = useAuth({ middleware: "guest" });
   const { cartCount } = useContext(CartContext);
@@ -43,9 +44,9 @@ export default function Header() {
                       </div>
                     </Link>
                   )}
-                  <a className="btn-logout" href="">
+                  <div className="btn-logout" onClick={logout}>
                     <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
-                  </a>
+                  </div>
                 </div>
               </div>
             </div>
