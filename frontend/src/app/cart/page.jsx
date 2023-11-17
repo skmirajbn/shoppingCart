@@ -3,12 +3,20 @@
 "use client";
 import { CartContext } from "@/context/cartContext";
 import { useAuth } from "@/hooks/auth";
+import axios from "@/lib/axios";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
+import useSWR from "swr";
 
 export default function Cart() {
   const { user } = useAuth({ middleware: "guest" });
-  const { cartProducts, productMutate } = useContext(CartContext);
+  const { data: dataCartProducts, mutate } = useSWR("cart", () => axios.get("api/cart"));
+  let cartProducts = dataCartProducts?.data;
+
+  const { productMutate, cartProducts: cartProductsContext } = useContext(CartContext);
+  if (!user) {
+    cartProducts = cartProductsContext;
+  }
   const [quantities, setQuantities] = useState({});
   const [subTotal, setSubTotal] = useState(0);
 
@@ -22,7 +30,21 @@ export default function Cart() {
 
   useEffect(() => {
     productMutate();
-  }, []);
+    mutate();
+  }, [user]);
+
+  //if there is products in the local storage takes that id and sync to the database and delted localstorage data
+  useEffect(() => {
+    if (user) {
+      const cartItems = JSON.parse(localStorage?.getItem("cart")) || [];
+      if (cartItems.length > 0) {
+        const cartItemIds = cartItems.map((item) => item.id);
+        console.log(cartItemIds);
+        axios.post("api/cart/sync", { product_ids: cartItemIds });
+        localStorage.removeItem("cart");
+      }
+    }
+  }, [user]);
 
   const handleRemoveItem = (index) => {
     const newCartProducts = cartProducts.filter((_, i) => i !== index);
@@ -48,6 +70,15 @@ export default function Cart() {
     calculateSubTotal(cartProducts, quantities);
   }, [quantities, cartProducts]);
 
+  const handleCartDelete = async (id) => {
+    try {
+      await axios.delete(`api/cart/${id}`);
+      mutate();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <section className="px-6 py-4 mx-auto bg-gray-100 max-w-7xl">
       <h2 className="py-6 text-4xl font-bold text-center">Cart</h2>
@@ -64,9 +95,17 @@ export default function Cart() {
                 </h4>
                 <h3>Total: {parseFloat(product.price) * parseInt(quantities[index]) || parseFloat(product.price)}</h3>
               </div>
-              <button className="px-4 py-1 text-white bg-red-600 rounded-md" onClick={() => handleRemoveItem(index)}>
-                Remove
-              </button>
+              {!user && (
+                <button className="px-4 py-1 text-white bg-red-600 rounded-md" onClick={() => handleRemoveItem(index)}>
+                  Remove
+                </button>
+              )}
+              {user && (
+                <button className="px-4 py-1 text-white bg-red-600 rounded-md" onClick={() => handleCartDelete(product.cart_product_id)}>
+                  Remove
+                </button>
+              )}
+              <p>{product.cart_product_id}</p>
             </div>
           ))}
         </div>

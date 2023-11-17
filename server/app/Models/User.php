@@ -42,4 +42,12 @@ class User extends Authenticatable {
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    function cart() {
+        return $this->hasMany(CartProduct::class, 'user_id');
+    }
+    function cartProducts() {
+        return $this->hasManyThrough(Product::class, CartProduct::class, 'user_id', 'id', 'id', 'product_id')
+            ->select('products.*', 'cart_products.id as cart_product_id');
+    }
 }

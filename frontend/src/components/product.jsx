@@ -2,18 +2,21 @@
 "use client";
 import { CartContext } from "@/context/cartContext";
 import { useIsLoggedIn } from "@/hooks/useIsLoggedIn";
+import axios from "@/lib/axios";
 import { addToCartLogic } from "@/lib/customFunctions";
 import { useContext } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useSWR from "swr";
 import Ratings from "./ratings";
 
 export default function Product({ product }) {
+  const { mutate } = useSWR("cart", () => axios.get("api/cart"));
   const { name, image, price, rating } = product;
   const { setCartCount, productMutate } = useContext(CartContext);
   const isLoggedin = useIsLoggedIn();
   const addToCart = async () => {
-    await addToCartLogic(product, toast, productMutate, isLoggedin);
+    await addToCartLogic(product, toast, productMutate, isLoggedin, mutate);
     productMutate();
   };
   return (

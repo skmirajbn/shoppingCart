@@ -5,14 +5,32 @@ namespace App\Http\Controllers;
 use App\Models\CartProduct;
 use App\Http\Requests\StoreCartProductRequest;
 use App\Http\Requests\UpdateCartProductRequest;
+use App\Models\Product;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class CartProductController extends Controller {
+    public function sync(Request $request) {
+        $productIds = $request->product_ids;
+        $user = auth()->user()->id;
+
+        foreach ($productIds as $productId) {
+            $cartProduct = new CartProduct();
+            $cartProduct->user_id = $user;
+            $cartProduct->product_id = $productId;
+            $cartProduct->save();
+        }
+        //return no content
+        return response()->noContent();
+
+
+    }
     /**
      * Display a listing of the resource.
      */
     public function index() {
-        $cartProducts = CartProduct::all();
-        return response()->json($cartProducts);
+        $products = User::find(auth()->user()->id)->cartProducts()->get();
+        return response()->json($products);
     }
 
     /**
@@ -26,7 +44,12 @@ class CartProductController extends Controller {
      * Store a newly created resource in storage.
      */
     public function store(StoreCartProductRequest $request) {
-        //
+        $cartProduct = new CartProduct();
+        $cartProduct->user_id = auth()->user()->id;
+        ;
+        $cartProduct->product_id = $request->product_id;
+        $cartProduct->save();
+        return response()->json($cartProduct);
     }
 
     /**
@@ -54,6 +77,9 @@ class CartProductController extends Controller {
      * Remove the specified resource from storage.
      */
     public function destroy(CartProduct $cartProduct) {
-        //
+        if ($cartProduct->user_id == auth()->user()->id) {
+            $cartProduct->delete();
+            return response()->json($cartProduct);
+        }
     }
 }

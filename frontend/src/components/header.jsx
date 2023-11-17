@@ -2,11 +2,15 @@
 import { CartContext } from "@/context/cartContext";
 import { useAuth } from "@/hooks/auth";
 import { useIsLoggedIn } from "@/hooks/useIsLoggedIn";
+import axios from "@/lib/axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useContext, useRef } from "react";
+import useSWR from "swr";
 import avatar from "./../../public/avatar.jpg";
 export default function Header() {
+  const { data: { data: loginCart } = {} } = useSWR("cart", () => axios.get("api/cart"));
+  const loginCartCount = loginCart?.length;
   const { logout } = useAuth({ middleware: "guest" });
   const isLoggedIn = useIsLoggedIn();
   const { user } = useAuth({ middleware: "guest" });
@@ -70,7 +74,10 @@ export default function Header() {
               <span className="font-bold">Cart</span>
               <div className="relative">
                 <i class="fa-solid fa-bag-shopping text-3xl"></i>
-                <div className="absolute flex items-center justify-center w-6 h-6 text-sm bg-red-600 rounded-full -top-1 -right-4">{cartCount}</div>
+                <div className="absolute flex items-center justify-center w-6 h-6 text-sm bg-red-600 rounded-full -top-1 -right-4">
+                  {!isLoggedIn && cartCount}
+                  {isLoggedIn && loginCartCount}
+                </div>
               </div>
             </div>
           </Link>

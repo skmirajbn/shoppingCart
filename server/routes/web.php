@@ -22,6 +22,11 @@ Route::group(['prefix' => 'api', 'middleware' => ['auth:sanctum']], function () 
     Route::get('/cart', [CartProductController::class, 'index']);
     Route::post('/add-product', [ProductController::class, 'store']);
     Route::delete('/product/{product}', [ProductController::class, 'destroy']);
+    Route::post('/cart', [CartProductController::class, 'store']);
+    Route::get('/cart', [CartProductController::class, 'index']);
+    Route::delete('/cart/{cartProduct}', [CartProductController::class, 'destroy']);
+
+    Route::post('/cart/sync', [CartProductController::class, 'sync']);
 });
 
 
