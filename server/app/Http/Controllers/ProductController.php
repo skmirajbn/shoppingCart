@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller {
     /**
@@ -25,7 +26,24 @@ class ProductController extends Controller {
      * Store a newly created resource in storage.
      */
     public function store(StoreProductRequest $request) {
-        //
+        // store the product
+        $product = new Product();
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->description = $request->description;
+        $product->rating = $request->rating;
+
+        // if has file then store the image to public disk and rename the image with unique name and store the image name
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . Str::uuid() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+            $product->image = $imageName;
+        }
+
+        $product->save();
+        return $product;
+
     }
 
     /**
@@ -53,6 +71,9 @@ class ProductController extends Controller {
      * Remove the specified resource from storage.
      */
     public function destroy(Product $product) {
-        //
+        $userRole = auth()->user()->role;
+        if ($userRole == 'admin') {
+            $product->delete();
+        }
     }
 }

@@ -18,7 +18,7 @@ export default function Product({ product }) {
   };
   return (
     <div className="h-full max-w-xs space-y-1 overflow-hidden bg-gray-100 rounded-lg">
-      <img className="object-cover w-full h-72" src={image} alt="" />
+      <img className="object-cover w-full h-72" src={process.env.NEXT_PUBLIC_BACKEND_URL + "images/" + image} alt="" />
       <div className="flex flex-col justify-between h-[12.5rem] p-4">
         <h3 className="text-lg font-semibold line-clamp-2">{name}</h3>
         <div>

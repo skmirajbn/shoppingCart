@@ -55,7 +55,7 @@ export default function Cart() {
         <div className="space-y-3">
           {cartProducts?.map((product, index) => (
             <div className="flex items-center gap-4" key={index}>
-              <img className="object-cover w-20 h-20 rounded-md" src={product.image} alt="" />
+              <img className="object-cover w-20 h-20 rounded-md" src={process.env.NEXT_PUBLIC_BACKEND_URL + "images/" + product.image} alt="" />
               <input className="w-12 px-2 py-2 border-2 border-gray-500 rounded-lg" value={quantities[index] || 1} type="number" onChange={(e) => handleQuantityChange(index, e.target.value)} />
               <div>
                 <h3 className="text-lg font-semibold text-green-800">{product.name}</h3>
