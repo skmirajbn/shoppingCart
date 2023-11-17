@@ -32,7 +32,7 @@ export default function Header() {
         <div className="flex items-center gap-4">
           {isLoggedIn && (
             <div className="flex items-center gap-4" onClick={toggleDropdown}>
-              <h3 className="font-medium ">Sk Miraj</h3>
+              <h3 className="font-medium ">{user?.name}</h3>
               <h5 className="px-2 py-1 bg-green-600 rounded-lg">{user?.role}</h5>
               <div className="relative flex items-center gap-2">
                 <Image className="object-cover rounded-full w-11 h-11" alt="avatar" src={avatar} />
