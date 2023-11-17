@@ -1,5 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
+"use client";
 import { CartContext } from "@/context/cartContext";
+import { useIsLoggedIn } from "@/hooks/useIsLoggedIn";
 import { addToCartLogic } from "@/lib/customFunctions";
 import { useContext } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -9,8 +11,9 @@ import Ratings from "./ratings";
 export default function Product({ product }) {
   const { name, image, price, rating } = product;
   const { setCartCount, productMutate } = useContext(CartContext);
+  const isLoggedin = useIsLoggedIn();
   const addToCart = async () => {
-    await addToCartLogic(product, toast, productMutate);
+    await addToCartLogic(product, toast, productMutate, isLoggedin);
     productMutate();
   };
   return (

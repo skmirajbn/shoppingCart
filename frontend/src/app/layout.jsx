@@ -2,6 +2,7 @@
 import Header from "@/components/header";
 import { CartContext } from "@/context/cartContext";
 import { useAuth } from "@/hooks/auth";
+import { useEventListenerOnLocalStorage } from "@/hooks/useEventListenerOnLocalStorage";
 import { Inter } from "next/font/google";
 import { useEffect, useState } from "react";
 import "./../../public/fontawesome/css/all.min.css";
@@ -14,16 +15,8 @@ export default function RootLayout({ children }) {
   const [cartProducts, setCartProducts] = useState([]);
   const [cartCount, setCartCount] = useState(0);
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (user) {
-        localStorage.setItem("login", true);
-      } else {
-        localStorage.removeItem("login");
-      }
-      productMutate();
-    }, 4000);
-  }, [user]);
+  // event listner on localstorage if login changed then force to logout and delete 'login'
+  useEventListenerOnLocalStorage();
 
   const productMutate = () => {
     let cartItems = JSON.parse(localStorage?.getItem("cart")) || [];
@@ -31,6 +24,19 @@ export default function RootLayout({ children }) {
     setCartProducts(carItems);
     setCartCount(cartItems.length);
   };
+
+  useEffect(() => {
+    if (user) {
+      if (!localStorage.getItem("login")) {
+        localStorage.setItem("login", true);
+      }
+    } else {
+      if (localStorage.getItem("login")) {
+        localStorage.removeItem("login");
+      }
+    }
+  }, [user]);
+
   useEffect(() => {
     productMutate();
   }, []);

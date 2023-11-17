@@ -1,3 +1,4 @@
+"use client";
 export default function Ratings({ rating = 4, className = "" }) {
   const stars = [];
   for (let i = 0; i < rating; i++) {

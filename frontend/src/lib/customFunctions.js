@@ -1,14 +1,7 @@
-export const isLoggedin = () => {
-  if (typeof window !== "undefined") {
-    return !!localStorage.getItem("login");
-  }
-  return false;
-};
-
-export const addToCartLogic = async (product, toast, productMutate) => {
+export const addToCartLogic = async (product, toast, productMutate, isLoggedin) => {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  if (isLoggedin()) {
+  if (isLoggedin) {
     try {
       const updatedCart = [...cart, product];
       localStorage.setItem("cart", JSON.stringify(updatedCart));

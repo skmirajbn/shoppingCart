@@ -1,12 +1,13 @@
 "use client";
 import { CartContext } from "@/context/cartContext";
 import { useAuth } from "@/hooks/auth";
-import { isLoggedin } from "@/lib/customFunctions";
+import { useIsLoggedIn } from "@/hooks/useIsLoggedIn";
 import Image from "next/image";
 import Link from "next/link";
 import { useContext, useRef } from "react";
 import avatar from "./../../public/avatar.jpg";
 export default function Header() {
+  const isLoggedIn = useIsLoggedIn();
   const { user } = useAuth({ middleware: "guest" });
   const { cartCount } = useContext(CartContext);
   const dropdown = useRef();
@@ -24,7 +25,7 @@ export default function Header() {
         </Link>
 
         <div className="flex items-center gap-4">
-          {isLoggedin() && (
+          {isLoggedIn && (
             <div className="flex items-center gap-4" onClick={toggleDropdown}>
               <h3 className="font-medium ">Sk Miraj</h3>
               <h5 className="px-2 py-1 bg-green-600 rounded-lg">{user?.role}</h5>
@@ -32,9 +33,9 @@ export default function Header() {
                 <Image className="object-cover rounded-full w-11 h-11" alt="avatar" src={avatar} />
                 <i class="fa-solid fa-chevron-down"></i>
                 <div ref={dropdown} className="hidden user-dropdown">
-                  <a className="btn-primary" href="">
+                  <Link className="btn-primary" href="">
                     <i class="fa-solid fa-bag-shopping mr-2"></i> My Orders
-                  </a>
+                  </Link>
                   {user?.role === "admin" && (
                     <Link href={"/admin/add-product"}>
                       <div className="btn-primary">
@@ -49,7 +50,7 @@ export default function Header() {
               </div>
             </div>
           )}
-          {!isLoggedin() && (
+          {!isLoggedIn && (
             <div className="flex items-center gap-3 ">
               <Link href="/login">
                 <button className="px-4 py-1 font-bold bg-blue-600 rounded-lg">
