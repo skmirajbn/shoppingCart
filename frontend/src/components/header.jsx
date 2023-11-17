@@ -38,7 +38,7 @@ export default function Header() {
                     <i class="fa-solid fa-bag-shopping mr-2"></i> My Orders
                   </Link>
                   {user?.role === "admin" && (
-                    <Link href={"/admin/add-product"}>
+                    <Link href={"/admin/product/add-product"}>
                       <div className="btn-primary">
                         <i class="fa-solid fa-bag-shopping mr-2"></i>Product +
                       </div>
