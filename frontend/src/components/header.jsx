@@ -1,6 +1,7 @@
 "use client";
 import { CartContext } from "@/context/cartContext";
 import { useAuth } from "@/hooks/auth";
+import { isLoggedin } from "@/lib/customFunctions";
 import Image from "next/image";
 import Link from "next/link";
 import { useContext, useRef } from "react";
@@ -23,7 +24,7 @@ export default function Header() {
         </Link>
 
         <div className="flex items-center gap-4">
-          {user && (
+          {isLoggedin() && (
             <div className="flex items-center gap-4" onClick={toggleDropdown}>
               <h3 className="font-medium ">Sk Miraj</h3>
               <div className="relative flex items-center gap-2">
@@ -40,7 +41,7 @@ export default function Header() {
               </div>
             </div>
           )}
-          {!user && (
+          {!isLoggedin() && (
             <div className="flex items-center gap-3 ">
               <Link href="/login">
                 <button className="px-4 py-1 font-bold bg-blue-600 rounded-lg">
