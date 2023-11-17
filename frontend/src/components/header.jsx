@@ -14,7 +14,7 @@ export default function Header() {
   const toggleDropdown = () => {
     dropdown.current.classList.toggle("hidden");
   };
-
+  console.log(isLoggedIn);
   return (
     <div className="py-4 text-white bg-gradient-to-r from-blue-500 to-emerald-500">
       <div className="flex items-center justify-between mx-auto max-w-7xl">

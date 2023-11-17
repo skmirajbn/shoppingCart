@@ -6,6 +6,6 @@ export const useIsLoggedIn = () => {
   useEffect(() => {
     setIsLoggedIn(localStorage.getItem("login") ? true : false);
   }, []);
-
+  console.log(isLoggedIn);
   return isLoggedIn;
 };
