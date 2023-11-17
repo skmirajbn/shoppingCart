@@ -114,7 +114,7 @@ export default function Cart() {
                   </button>
                 )}
                 {user && (
-                  <button className="px-4 py-1 text-white bg-red-600 rounded-md" onClick={() => handleCartDelete(product.cart_product_id)}>
+                  <button type="button" className="px-4 py-1 text-white bg-red-600 rounded-md" onClick={() => handleCartDelete(product.cart_product_id)}>
                     Remove
                   </button>
                 )}
