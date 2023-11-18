@@ -67,7 +67,6 @@ export default function Cart() {
     });
     setSubTotal(total);
   };
-
   useEffect(() => {
     calculateSubTotal(cartProducts, quantities);
   }, [quantities, cartProducts]);
