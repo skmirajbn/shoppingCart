@@ -26,7 +26,7 @@ class StoreProductRequest extends FormRequest {
         return [
             'name' => 'required',
             'price' => 'required',
-            'image' => 'mimes:jpeg,png,jpg,gif,svg,avif,webp|max:2048',
+            'image' => 'mimes:jpg|max:2048',
             'rating' => 'required',
         ];
     }

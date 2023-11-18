@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function AdminProduct() {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [errors, setErrors] = useState([]);
   const productImageRef = useRef();
@@ -29,7 +30,7 @@ export default function AdminProduct() {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     let data = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
@@ -38,8 +39,8 @@ export default function AdminProduct() {
     if (productInputRef.current.files[0]) {
       data.append("image", productInputRef.current.files[0]);
     }
-
-    axios
+    setIsLoading(true);
+    await axios
       .post("api/add-product", data)
       .then(() => {
         alert("Product Added Successfully");
@@ -50,6 +51,7 @@ export default function AdminProduct() {
         if (error.response.status !== 422) throw error;
         setErrors(error.response.data.errors);
       });
+    setIsLoading(false);
   };
   return (
     <form className="flex flex-col justify-center space-y-3" onSubmit={handleSubmit}>
@@ -96,6 +98,7 @@ export default function AdminProduct() {
       <button className="py-2 text-white bg-orange-600 rounded-md hover:bg-gradient-to-r hover:from-orange-500 hover:to-orange-700" type="submit">
         Add Product
       </button>
+      {isLoading && <p>Loading...</p>}
     </form>
   );
 }
