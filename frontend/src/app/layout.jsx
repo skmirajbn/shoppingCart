@@ -2,7 +2,6 @@
 import Header from "@/components/header";
 import { CartContext } from "@/context/cartContext";
 import { useAuth } from "@/hooks/auth";
-import { useEventListenerOnLocalStorage } from "@/hooks/useEventListenerOnLocalStorage";
 import { Inter } from "next/font/google";
 import { useEffect, useState } from "react";
 import "./../../public/fontawesome/css/all.min.css";
@@ -16,7 +15,7 @@ export default function RootLayout({ children }) {
   const [cartCount, setCartCount] = useState(0);
 
   // event listner on localstorage if login changed then force to logout and delete 'login'
-  useEventListenerOnLocalStorage();
+  // useEventListenerOnLocalStorage();
 
   const productMutate = () => {
     let cartItems = JSON.parse(localStorage?.getItem("cart")) || [];
